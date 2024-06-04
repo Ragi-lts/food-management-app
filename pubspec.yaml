@@ -39,6 +39,9 @@ dependencies:
   mobile_scanner: ^3.5.7
   provider: ^6.1.2
   intl: ^0.17.0
+  uuid: ^4.1.0
+  table_calendar: ^3.0.8
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -95,3 +98,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/appIcon.png"
