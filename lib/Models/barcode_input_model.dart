@@ -1,33 +1,20 @@
-class BarcodeInputModel  {
-  bool isRunning = false; //バーコード読み取り中
-  String barcodeNumber = '';  // 読み取ったバーコード番号
-  bool isRead = false;  // 読取済みか否か
-  DateTime? limit;  // 期限日
-  String? createdAt;  //  作成日時
+import 'package:uuid/uuid.dart';
 
-
-
-// 初期化する
-  void init() {
-    barcodeNumber = '';
-    isRead = false;
-    limit = null;
-  }
+class BarcodeInputModel {
+  String? id;
+  String barcodeNumber = ''; // 読み取ったバーコード番号
+  DateTime? limitDate; // 期限日
+  String? createdAt; //  作成日時
 
   // バーコードをセットする
-  void setBarcodeNumber(String value) {
+  void setBarcodeInfo({required String value, DateTime? now}) {
+    id = const Uuid().v4();
     barcodeNumber = value;
-    isRead = true;
-    createdAt = DateTime.now().toString();
+    createdAt = now != null ? now.toString() : (DateTime.now()).toString();
   }
 
   // 期限をセットする
   void setLimitDate(DateTime value) {
-    limit = value;
+    limitDate = value;
   }
-
-  void setIsRunning(bool value) {
-    isRunning = value;
-  }
-
 }

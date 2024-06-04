@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:food_management/Enums/home_tab_enum.dart';
+import 'package:food_management/Pages/dash_board.dart';
+import 'package:food_management/Pages/my_page.dart';
 import 'package:food_management/Providers/barcode_input_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'Pages/scan_page.dart';
 import 'Providers/barcode_input_log_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'Models/barcode_input_model.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => BarcodeInputProvider()),
-      ChangeNotifierProvider(create: (_) => BarcodeInputLogProvider())
-    ],
-    child: const MyApp(),
-  ));
+  initializeDateFormatting().then((_) => runApp(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => BarcodeInputProvider()),
+          ChangeNotifierProvider(create: (_) => BarcodeInputLogProvider()),
+        ],
+        child: const MyApp(),
+      )));
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     info.addAll([
       HomePageTab(
           title: "ダッシュボード",
-          content: null,
+          content: const DashBoardPage(),
           bottomNavBarItem: const BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined), label: "ダッシュボード", activeIcon: Icon(Icons.dashboard_rounded))),
       HomePageTab(
@@ -64,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.camera_alt_outlined), label: '読み取る', activeIcon: Icon(Icons.camera_alt_rounded))),
       HomePageTab(
           title: "マイページ",
-          content: null,
+          content: const MyPage(),
           bottomNavBarItem: const BottomNavigationBarItem(
               icon: Icon(Icons.face_outlined), label: "マイページ", activeIcon: Icon(Icons.face_rounded)))
     ]);
@@ -83,8 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: tabInfo[currentIndex].content,
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
-          backgroundColor:  Theme.of(context).secondaryHeaderColor,
-          selectedFontSize: 16,
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          selectedFontSize: 18,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           onTap: (index) {
             setState(() {

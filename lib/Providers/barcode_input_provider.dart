@@ -2,41 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:food_management/Models/barcode_input_model.dart';
 
 class BarcodeInputProvider extends ChangeNotifier {
-  BarcodeInputModel model = BarcodeInputModel();
+  BarcodeInputModel? model;
+  bool isRunning = false;
+  bool isRead = false;
 
-  String getBarcodeNumber() {
-    return model.barcodeNumber;
-  }
-
-  bool getIsRunning() {
-    return model.isRunning;
-  }
-
-  bool getIsRead() {
-    return model.isRead;
-  }
-
-  DateTime? getLimit() {
-    return model.limit;
-  }
-
-  void setLimitDate(DateTime value) {
-    model.limit = value;
+  void init(BarcodeInputModel m) {
+    model = m;
     notifyListeners();
   }
 
+  String getBarcodeNumber() {
+    return model != null ? model!.barcodeNumber : '';
+  }
+
+  DateTime? getLimit() {
+    return model != null ? model!.limitDate : null;
+  }
+
+  void setLimitDate(DateTime value) {
+    if (model != null) {
+      model!.setLimitDate(value);
+      notifyListeners();
+    }
+  }
+
+  void setIsRead(bool value) {
+    isRead = value;
+  }
+
   void setIsRunning(bool value) {
-    model.isRunning = value;
+    isRunning = value;
     notifyListeners();
   }
 
   void reset() {
-    model.init();
+    model = null;
+    isRead = false;
     notifyListeners();
   }
 
   void setBarcodeNumber(String value) {
-    model.setBarcodeNumber(value);
-    notifyListeners();
+    if (model != null) {
+      model!.setBarcodeInfo(value: value);
+      notifyListeners();
+    }
   }
 }
