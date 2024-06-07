@@ -40,7 +40,8 @@ class ScanPage extends StatelessWidget {
 
   Future<void> register(BuildContext context, BarcodeInputModel? model) async {
     bool isRegisterable = true;
-    BarcodeInputLogProvider logProvider = context.read<BarcodeInputLogProvider>();
+    BarcodeInputLogProvider logProvider =
+        context.read<BarcodeInputLogProvider>();
     List<BarcodeInputModel> list = logProvider.getLog();
     // 直前に同じバーコードを読もうとするとワーニング
     if (list.isNotEmpty && list.last.barcodeNumber == model!.barcodeNumber) {
@@ -58,7 +59,9 @@ class ScanPage extends StatelessWidget {
       children: [
         Row(
           children: [
-            SizedBox(width: MediaQuery.of(context).size.width / 3, child: const Text("バーコード番号：")),
+            SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: const Text("バーコード番号：")),
             Text(provider.getBarcodeNumber()),
           ],
         ),
@@ -95,19 +98,15 @@ class ScanPage extends StatelessWidget {
                   child: MobileScanner(
                     controller: scannerController,
                     fit: BoxFit.cover,
-                    onScannerStarted: (arguments) {
-                      debugPrint("カメラ読取開始");
-                      provider.setIsRunning(true);
-                    },
                     onDetect: (capture) async {
-                      scannerController?.events?.pause();
                       final Barcode code = capture.barcodes.first;
                       if (model == null && code.displayValue != null) {
                         model = BarcodeInputModel();
                         model!.setBarcodeInfo(value: code.displayValue!);
                         provider.init(model!);
                         provider.setIsRead(true);
-                        debugPrint("モデル(BarcodeInputModel)を生成しました：${model!.barcodeNumber}");
+                        debugPrint(
+                            "モデル(BarcodeInputModel)を生成しました：${model!.barcodeNumber}");
                       }
                     },
                   ),
@@ -134,18 +133,10 @@ class ScanPage extends StatelessWidget {
                             child: const Text("読み取りをはじめる"),
                             onPressed: () async {
                               debugPrint("カメラ起動中");
-                              scannerController = MobileScannerController(detectionSpeed: DetectionSpeed.normal);
-                              try {
-                                MobileScannerArguments? args = await scannerController!.start();
-                                if (args == null) {
-                                  debugPrint("カメラを起動できませんでした");
-                                  return;
-                                }
-                                debugPrint("カメラを起動しました");
-                                provider.setIsRunning(true);
-                              } on MobileScannerException catch (_, err) {
-                                debugPrint(err.toString());
-                              }
+                              scannerController = MobileScannerController(
+                                  detectionSpeed: DetectionSpeed.normal);
+                              debugPrint("カメラを起動しました");
+                              provider.setIsRunning(true);
                             },
                           )),
               ),
@@ -156,11 +147,13 @@ class ScanPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 12.0),
                       child: inputBarcodeInfo(context, provider),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 12.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -170,34 +163,41 @@ class ScanPage extends StatelessWidget {
                             child: OutlinedButton.icon(
                                 onPressed: () async {
                                   DateTime? limit = await showDatePicker(
-                                      initialEntryMode: DatePickerEntryMode.inputOnly,
+                                      initialEntryMode:
+                                          DatePickerEntryMode.inputOnly,
                                       context: context,
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime.now(),
-                                      lastDate: DateTime.now().add(const Duration(days: 100)));
+                                      lastDate: DateTime.now()
+                                          .add(const Duration(days: 100)));
                                   if (limit != null) {
                                     // 日付入力されるとセットされる
                                     provider.setLimitDate(limit);
                                   }
                                 },
                                 icon: const Icon(Icons.calendar_month),
-                                label: Text(provider.getLimit() == null ? "期限を設定する" : "期限を設定し直す")),
+                                label: Text(provider.getLimit() == null
+                                    ? "期限を設定する"
+                                    : "期限を設定し直す")),
                           ),
                           Text(
                             provider.getLimit() == null
                                 ? "期限が設定されていません"
-                                : DateFormat('yyyy/MM/dd').format(provider.getLimit()!),
+                                : DateFormat('yyyy/MM/dd')
+                                    .format(provider.getLimit()!),
                           ),
                         ],
                       ),
                     ),
                     // 登録する／しないボタン
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 12.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 12.0),
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton(
-                            onPressed: provider.getLimit() != null && provider.model != null
+                            onPressed: provider.getLimit() != null &&
+                                    provider.model != null
                                 ? () async => register(context, provider.model!)
                                 : null,
                             child: const Text("登録する"),
@@ -212,7 +212,9 @@ class ScanPage extends StatelessWidget {
         // 読取履歴
         Container(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 12.0),
-          child: SizedBox(height: MediaQuery.of(context).size.height / 3, child: const ScanLogWidget()),
+          child: SizedBox(
+              height: MediaQuery.of(context).size.height / 3,
+              child: const ScanLogWidget()),
         )
       ],
     );
