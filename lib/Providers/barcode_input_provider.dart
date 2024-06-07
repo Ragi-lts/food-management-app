@@ -16,7 +16,7 @@ class BarcodeInputProvider extends ChangeNotifier {
   }
 
   DateTime? getLimit() {
-    return model != null ? model!.limitDate : null;
+    return model?.limitDate;
   }
 
   void setLimitDate(DateTime value) {
